@@ -18,6 +18,7 @@ public class PlayerController : MonoBehaviour
 
 
     private Rigidbody2D m_Rb;
+    private Animator m_Animator;
     private float m_HorizontalInput;
 
     private bool m_FacingRight;
@@ -39,6 +40,7 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         m_Rb = GetComponent<Rigidbody2D>();
+        m_Animator = GetComponent<Animator>();
         m_FacingRight = true;
     }
 
@@ -49,6 +51,13 @@ public class PlayerController : MonoBehaviour
         m_IsGrounded = Physics2D.OverlapCircle(groundCheck.position, m_CheckRadius, platform);
         m_IsTouchingWall = Physics2D.OverlapCircle(wallCheck.position, m_CheckRadius, platform);
 
+        if (m_HorizontalInput != 0)
+        {
+            m_Animator.SetBool("isWalking", true);
+        } else
+        {
+            m_Animator.SetBool("isWalking", false);
+        }
 
         //flip the character to face correct direction
         if ((m_HorizontalInput > 0 && !m_FacingRight) || (m_HorizontalInput < 0 && m_FacingRight))
