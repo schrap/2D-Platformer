@@ -75,7 +75,8 @@ public class PlayerController : MonoBehaviour
         if (m_IsWallSliding && !m_isWallJumping)
         {
             m_Rb.velocity = new Vector2(m_Rb.velocity.x, Mathf.Clamp(m_Rb.velocity.y, -wallSlidingSpeed, float.MaxValue));
-        } else if (m_IsWallSliding && m_isWallJumping)
+        }
+        else if (m_IsWallSliding && m_isWallJumping)
         {
             m_Rb.velocity = Vector2.up * wallJumpForce * Time.deltaTime * m_DeltaTimeScale;
             m_isWallJumping = false;
@@ -84,7 +85,8 @@ public class PlayerController : MonoBehaviour
         if (m_Rb.velocity.y < 0)
         {
             m_IsFalling = true;
-        } else
+        }
+        else
         {
             m_IsFalling = false;
         }
@@ -103,7 +105,7 @@ public class PlayerController : MonoBehaviour
         }
 
         //animate idle or walking animation
-        if (m_HorizontalInput != 0)
+        if (m_HorizontalInput != 0 && m_IsGrounded)
         {
             m_Animator.SetBool("isWalking", true);
         }
@@ -113,16 +115,15 @@ public class PlayerController : MonoBehaviour
         }
 
         //animate falling or jumping animation
-        if (!m_IsGrounded || !m_IsTouchingWall)
+        if (!m_IsGrounded || m_IsTouchingWall)
         {
-            if (m_IsFalling)
-            {
-                //m_Animator.SetBool("isFalling", true);
-            }
-            else
-            {
-                //m_Animator.SetBool("isFalling", false);
-            }
+            m_Animator.SetBool("isJumping", !m_IsFalling);
+            m_Animator.SetBool("isFalling", m_IsFalling);
+        }
+        else
+        {
+            m_Animator.SetBool("isJumping", false);
+            m_Animator.SetBool("isFalling", false);
         }
     }
 
