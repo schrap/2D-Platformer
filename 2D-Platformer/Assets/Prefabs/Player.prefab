@@ -123,7 +123,7 @@ Rigidbody2D:
   m_Material: {fileID: 6200000, guid: 09896c2712b26e84dbe1279f1797cf05, type: 2}
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 4
 --- !u!95 &1892375560
 Animator:
@@ -158,14 +158,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   platform:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 256
   groundCheck: {fileID: 7498440223292615639}
   wallCheck: {fileID: 1841441797295802889}
   movementSpeed: 20
   wallSlidingSpeed: 1
   jumpAmount: 2
-  jumpForce: 30
-  jumpDuration: 3
+  jumpForce: 35
+  wallJumpForce: 50
+  jumpDuration: 2
 --- !u!1 &6161597041585981445
 GameObject:
   m_ObjectHideFlags: 0

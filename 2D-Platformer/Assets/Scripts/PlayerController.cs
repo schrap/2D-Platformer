@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
 
     public int jumpAmount;
     public float jumpForce;
+    public float wallJumpForce;
     public float jumpDuration;
 
 
@@ -23,6 +24,7 @@ public class PlayerController : MonoBehaviour
     private bool m_IsGrounded;
     private bool m_IsJumping;
     private bool m_IsLongJumping;
+    private bool m_isWallJumping;
     private bool m_IsTouchingWall;
     private bool m_IsWallSliding;
 
@@ -76,9 +78,17 @@ public class PlayerController : MonoBehaviour
         {
             m_IsJumping = true;
             m_JumpTimer = jumpDuration;
+
+            if (m_IsWallSliding)
+            {
+                m_isWallJumping = true;
+            } else
+            {
+                m_isWallJumping = false;
+            }
         }
 
-        
+
         //player jumps higher on first jump if button is pressed for longer
         if (Input.GetKey(KeyCode.W) && m_JumpsAvailable == jumpAmount - 1)
         {
@@ -86,11 +96,13 @@ public class PlayerController : MonoBehaviour
             {
                 m_JumpTimer -= Time.deltaTime;
                 m_IsLongJumping = true;
-            } else
+            }
+            else
             {
                 m_IsLongJumping = false;
             }
-        } else
+        }
+        else
         {
             m_IsLongJumping = false;
         }
@@ -98,6 +110,7 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.W))
         {
             m_IsLongJumping = false;
+            m_isWallJumping = false;
         }
     }
 
@@ -116,9 +129,13 @@ public class PlayerController : MonoBehaviour
             m_JumpTimer -= Time.deltaTime * m_DeltaTimeScale;
         }
 
-        if (m_IsWallSliding)
+        if (m_IsWallSliding && !m_isWallJumping)
         {
             m_Rb.velocity = new Vector2(m_Rb.velocity.x, Mathf.Clamp(m_Rb.velocity.y, -wallSlidingSpeed, float.MaxValue));
+        } else if (m_IsWallSliding && m_isWallJumping)
+        {
+            m_Rb.velocity = Vector2.up * wallJumpForce * Time.deltaTime * m_DeltaTimeScale;
+            m_isWallJumping = false;
         }
 
         m_Rb.velocity = new Vector2(m_HorizontalInput * movementSpeed * Time.deltaTime * m_DeltaTimeScale, m_Rb.velocity.y);
