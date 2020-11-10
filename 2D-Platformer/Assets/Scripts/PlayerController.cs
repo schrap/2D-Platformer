@@ -28,6 +28,7 @@ public class PlayerController : MonoBehaviour
     private bool m_isWallJumping;
     private bool m_IsTouchingWall;
     private bool m_IsWallSliding;
+    private bool m_IsFalling;
 
     private int m_JumpsAvailable;
     private float m_JumpTimer;
@@ -51,14 +52,49 @@ public class PlayerController : MonoBehaviour
         m_IsGrounded = Physics2D.OverlapCircle(groundCheck.position, m_CheckRadius, platform);
         m_IsTouchingWall = Physics2D.OverlapCircle(wallCheck.position, m_CheckRadius, platform);
 
-        if (m_HorizontalInput != 0)
+        animatePlayer();
+        movePlayer();
+    }
+
+    //calculates actual movement of player based on set bools in movePlayer function
+    private void FixedUpdate()
+    {
+        if (m_IsJumping)
         {
-            m_Animator.SetBool("isWalking", true);
-        } else
-        {
-            m_Animator.SetBool("isWalking", false);
+            m_Rb.velocity = Vector2.up * jumpForce * Time.deltaTime * m_DeltaTimeScale;
+            m_JumpsAvailable--;
+            m_IsJumping = false;
         }
 
+        if (m_IsLongJumping)
+        {
+            m_Rb.velocity = Vector2.up * jumpForce * Time.deltaTime * m_DeltaTimeScale;
+            m_JumpTimer -= Time.deltaTime * m_DeltaTimeScale;
+        }
+
+        if (m_IsWallSliding && !m_isWallJumping)
+        {
+            m_Rb.velocity = new Vector2(m_Rb.velocity.x, Mathf.Clamp(m_Rb.velocity.y, -wallSlidingSpeed, float.MaxValue));
+        } else if (m_IsWallSliding && m_isWallJumping)
+        {
+            m_Rb.velocity = Vector2.up * wallJumpForce * Time.deltaTime * m_DeltaTimeScale;
+            m_isWallJumping = false;
+        }
+
+        if (m_Rb.velocity.y < 0)
+        {
+            m_IsFalling = true;
+        } else
+        {
+            m_IsFalling = false;
+        }
+
+        m_Rb.velocity = new Vector2(m_HorizontalInput * movementSpeed * Time.deltaTime * m_DeltaTimeScale, m_Rb.velocity.y);
+    }
+
+
+    private void animatePlayer()
+    {
         //flip the character to face correct direction
         if ((m_HorizontalInput > 0 && !m_FacingRight) || (m_HorizontalInput < 0 && m_FacingRight))
         {
@@ -66,6 +102,33 @@ public class PlayerController : MonoBehaviour
             m_FacingRight = !m_FacingRight;
         }
 
+        //animate idle or walking animation
+        if (m_HorizontalInput != 0)
+        {
+            m_Animator.SetBool("isWalking", true);
+        }
+        else
+        {
+            m_Animator.SetBool("isWalking", false);
+        }
+
+        //animate falling or jumping animation
+        if (!m_IsGrounded || !m_IsTouchingWall)
+        {
+            if (m_IsFalling)
+            {
+                //m_Animator.SetBool("isFalling", true);
+            }
+            else
+            {
+                //m_Animator.SetBool("isFalling", false);
+            }
+        }
+    }
+
+    //sets bools to indicate movement of player (i.e. walking, jumping, wall sliding etc.)
+    private void movePlayer()
+    {
         //reset jumps when player is on ground or touching wall
         if (m_IsGrounded || m_IsTouchingWall)
         {
@@ -91,7 +154,8 @@ public class PlayerController : MonoBehaviour
             if (m_IsWallSliding)
             {
                 m_isWallJumping = true;
-            } else
+            }
+            else
             {
                 m_isWallJumping = false;
             }
@@ -121,32 +185,5 @@ public class PlayerController : MonoBehaviour
             m_IsLongJumping = false;
             m_isWallJumping = false;
         }
-    }
-
-    private void FixedUpdate()
-    {
-        if (m_IsJumping)
-        {
-            m_Rb.velocity = Vector2.up * jumpForce * Time.deltaTime * m_DeltaTimeScale;
-            m_JumpsAvailable--;
-            m_IsJumping = false;
-        }
-
-        if (m_IsLongJumping)
-        {
-            m_Rb.velocity = Vector2.up * jumpForce * Time.deltaTime * m_DeltaTimeScale;
-            m_JumpTimer -= Time.deltaTime * m_DeltaTimeScale;
-        }
-
-        if (m_IsWallSliding && !m_isWallJumping)
-        {
-            m_Rb.velocity = new Vector2(m_Rb.velocity.x, Mathf.Clamp(m_Rb.velocity.y, -wallSlidingSpeed, float.MaxValue));
-        } else if (m_IsWallSliding && m_isWallJumping)
-        {
-            m_Rb.velocity = Vector2.up * wallJumpForce * Time.deltaTime * m_DeltaTimeScale;
-            m_isWallJumping = false;
-        }
-
-        m_Rb.velocity = new Vector2(m_HorizontalInput * movementSpeed * Time.deltaTime * m_DeltaTimeScale, m_Rb.velocity.y);
     }
 }
