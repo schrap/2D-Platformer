@@ -162,7 +162,7 @@ MonoBehaviour:
   groundCheck: {fileID: 7498440223292615639}
   wallCheck: {fileID: 1841441797295802889}
   movementSpeed: 20
-  wallSlidingSpeed: 2
+  wallSlidingSpeed: 1
   jumpAmount: 2
   jumpForce: 30
   jumpDuration: 3
