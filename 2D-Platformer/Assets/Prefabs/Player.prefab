@@ -164,9 +164,9 @@ MonoBehaviour:
   movementSpeed: 20
   wallSlidingSpeed: 1
   jumpAmount: 2
-  jumpForce: 35
+  jumpForce: 40
   wallJumpForce: 50
-  jumpDuration: 2
+  longJumpDuration: 1.2
   dashPower: 20
   dashDuration: 4
 --- !u!1 &6161597041585981445
