@@ -167,7 +167,7 @@ MonoBehaviour:
   jumpForce: 40
   wallJumpForce: 50
   longJumpDuration: 1.2
-  dashPower: 20
+  dashPower: 16.5
   dashDuration: 4
 --- !u!1 &6161597041585981445
 GameObject:

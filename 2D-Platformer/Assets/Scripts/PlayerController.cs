@@ -37,7 +37,9 @@ public class PlayerController : MonoBehaviour
     private bool m_isWallJumping;
     private bool m_IsWallSliding;
     private bool m_IsDashing;
-    private bool m_IsFalling;
+    private bool m_AnimateFalling;
+
+    private bool m_AnimateDash;
 
     private int m_JumpsAvailable;
     private float m_LongJumpTimer;
@@ -112,7 +114,7 @@ public class PlayerController : MonoBehaviour
 
         m_dashTimer -= Time.deltaTime * m_DeltaTimeScale;   //used for dash cooldown
 
-        m_IsFalling = velocityY < 0 ? true : false;   //used for jumping and falling animation
+        m_AnimateFalling = velocityY < 0 ? true : false;   //used for jumping and falling animation
 
         m_Rb.velocity = new Vector2(m_HorizontalInput * movementSpeed * Time.deltaTime * m_DeltaTimeScale, velocityY);
     }
@@ -128,17 +130,25 @@ public class PlayerController : MonoBehaviour
             m_FacingRight = !m_FacingRight;
         }
 
+        if (m_AnimateDash)
+        {
+            m_Animator.SetTrigger("isDashing");
+            m_AnimateDash = false;
+        }
+
         if (m_IsGrounded) //animate idle or walking animation
         {
+            
             m_Animator.SetBool("isWalking", m_HorizontalInput != 0);
             m_Animator.SetBool("isJumping", false);
             m_Animator.SetBool("isFalling", false);
         }
         else //animate falling or jumping
         {
+            
             m_Animator.SetBool("isWalking", false);
-            m_Animator.SetBool("isJumping", !m_IsFalling);
-            m_Animator.SetBool("isFalling", m_IsFalling);
+            m_Animator.SetBool("isJumping", !m_AnimateFalling);
+            m_Animator.SetBool("isFalling", m_AnimateFalling);
         }
     }
 
@@ -198,6 +208,7 @@ public class PlayerController : MonoBehaviour
             m_IsDashing = true;
             m_DashAvailable = false;
             m_dashTimer = dashDuration;
+            m_AnimateDash = true;
         }
     }
 }
