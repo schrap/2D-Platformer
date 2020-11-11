@@ -16,6 +16,8 @@ public class PlayerController : MonoBehaviour
     public float wallJumpForce;
     public float jumpDuration;
 
+    public float dashPower;
+    public float dashDuration;
 
     private Rigidbody2D m_Rb;
     private Animator m_Animator;
@@ -29,9 +31,13 @@ public class PlayerController : MonoBehaviour
     private bool m_IsTouchingWall;
     private bool m_IsWallSliding;
     private bool m_IsFalling;
+    private bool m_IsDashing;
+    private bool m_DashAvailable;
 
     private int m_JumpsAvailable;
     private float m_JumpTimer;
+
+    private float m_dashTimer;
 
     private float m_CheckRadius = 0.001f;
 
@@ -43,6 +49,7 @@ public class PlayerController : MonoBehaviour
         m_Rb = GetComponent<Rigidbody2D>();
         m_Animator = GetComponent<Animator>();
         m_FacingRight = true;
+        m_DashAvailable = true;
     }
 
     private void Update()
@@ -82,14 +89,25 @@ public class PlayerController : MonoBehaviour
             m_isWallJumping = false;
         }
 
-        if (m_Rb.velocity.y < 0)
+        if (m_IsDashing)
         {
-            m_IsFalling = true;
+            if (m_FacingRight)
+            {
+                m_HorizontalInput += dashPower;
+            }
+            else
+            {
+                m_HorizontalInput -= dashPower;
+            }
+            m_IsDashing = false;
         }
-        else
+        if (!m_DashAvailable)
         {
-            m_IsFalling = false;
+            m_dashTimer -= Time.deltaTime * m_DeltaTimeScale;
+            m_DashAvailable = m_dashTimer < 0 ? true : false;
         }
+
+        m_IsFalling = m_Rb.velocity.y < 0 ? true : false;
 
         m_Rb.velocity = new Vector2(m_HorizontalInput * movementSpeed * Time.deltaTime * m_DeltaTimeScale, m_Rb.velocity.y);
     }
@@ -185,6 +203,13 @@ public class PlayerController : MonoBehaviour
         {
             m_IsLongJumping = false;
             m_isWallJumping = false;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space) && m_DashAvailable)
+        {
+            m_IsDashing = true;
+            m_DashAvailable = false;
+            m_dashTimer = dashDuration;
         }
     }
 }
