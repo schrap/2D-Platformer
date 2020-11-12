@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Damage : MonoBehaviour
+public class EnemyDamage : MonoBehaviour
 {
 
     public Transform player;
