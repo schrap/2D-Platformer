@@ -5,24 +5,29 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public LayerMask platform;
+    public LayerMask enemies;
     public Transform groundCheck;
     public Transform wallCheck;
+    public Transform attackPoint;
 
-    public float movementSpeed;
-    public float wallSlidingSpeed;
+    public float movementSpeed = 20.0f;
+    public float wallSlidingSpeed = 1.0f;
 
-    public int jumpAmount;
-    public float jumpForce;
-    public float wallJumpForce;
-    public float longJumpDuration;
+    public int jumpAmount = 2;
+    public float jumpForce = 40.0f;
+    public float wallJumpForce = 50.0f;
+    public float longJumpDuration = 1.2f;
 
-    public float dashPower;
-    public float dashDuration;
+    public float dashPower = 16.5f;
+    public float dashDuration = 4.0f;
+
+    public int attackDamage = 1;
+    public float attackRange = 0.5f;
+    public float m_CheckRadius = 0.05f;
 
     private Rigidbody2D m_Rb;
     private Animator m_Animator;
 
-    private float m_CheckRadius = 0.001f;
     private float m_DeltaTimeScale = 10.0f;
 
     private float m_HorizontalInput;
@@ -46,6 +51,7 @@ public class PlayerController : MonoBehaviour
 
     private bool m_AnimateFalling;
     private bool m_AnimateDash;
+    private bool m_animateAttack;
 
 
     private void Start()
@@ -59,8 +65,10 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         movePlayer();
+        playerAttack();
         animatePlayer();
     }
+
 
     //calculates actual movement of player based on set bools in movePlayer function
     private void FixedUpdate()
@@ -116,39 +124,6 @@ public class PlayerController : MonoBehaviour
         m_AnimateFalling = velocityY < 0 ? true : false;   //used for jumping and falling animation
 
         m_Rb.velocity = new Vector2(m_HorizontalInput * movementSpeed * Time.deltaTime * m_DeltaTimeScale, velocityY);
-    }
-
-
-    //animate the correct movement of player
-    private void animatePlayer()
-    {
-        //flip the character to face correct direction
-        if ((m_HorizontalInput > 0 && !m_FacingRight) || (m_HorizontalInput < 0 && m_FacingRight))
-        {
-            transform.Rotate(0, 180, 0);
-            m_FacingRight = !m_FacingRight;
-        }
-
-        if (m_AnimateDash)
-        {
-            m_Animator.SetTrigger("isDashing");
-            m_AnimateDash = false;
-        }
-
-        if (m_IsGrounded) //animate idle or walking animation
-        {
-            
-            m_Animator.SetBool("isWalking", m_HorizontalInput != 0);
-            m_Animator.SetBool("isJumping", false);
-            m_Animator.SetBool("isFalling", false);
-        }
-        else //animate falling or jumping
-        {
-            
-            m_Animator.SetBool("isWalking", false);
-            m_Animator.SetBool("isJumping", !m_AnimateFalling);
-            m_Animator.SetBool("isFalling", m_AnimateFalling);
-        }
     }
 
 
@@ -209,5 +184,69 @@ public class PlayerController : MonoBehaviour
             m_dashTimer = dashDuration;
             m_AnimateDash = true;
         }
+    }
+
+
+    private void playerAttack()
+    {
+        if (Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemies);
+
+            foreach(Collider2D enemy in hitEnemies)
+            {
+                enemy.GetComponent<EnemyHealth>().receiveDamage(attackDamage);
+            }
+
+            m_animateAttack = true;
+        }
+    }
+
+
+    //animate the correct movement of player
+    private void animatePlayer()
+    {
+        //flip the character to face correct direction
+        if ((m_HorizontalInput > 0 && !m_FacingRight) || (m_HorizontalInput < 0 && m_FacingRight))
+        {
+            transform.Rotate(0, 180, 0);
+            m_FacingRight = !m_FacingRight;
+        }
+
+        if (m_animateAttack)
+        {
+            m_Animator.SetTrigger("isAttacking");
+            m_animateAttack = false;
+        }
+
+        if (m_AnimateDash)
+        {
+            m_Animator.SetTrigger("isDashing");
+            m_AnimateDash = false;
+        }
+
+        if (m_IsGrounded) //animate idle or walking animation
+        {
+            
+            m_Animator.SetBool("isWalking", m_HorizontalInput != 0);
+            m_Animator.SetBool("isJumping", false);
+            m_Animator.SetBool("isFalling", false);
+        }
+        else //animate falling or jumping
+        {
+            
+            m_Animator.SetBool("isWalking", false);
+            m_Animator.SetBool("isJumping", !m_AnimateFalling);
+            m_Animator.SetBool("isFalling", m_AnimateFalling);
+        }
+    }
+
+
+    //visualize groundcheck, wallcheck and attack point in unity editor
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.DrawWireSphere(groundCheck.position, m_CheckRadius);
+        Gizmos.DrawWireSphere(wallCheck.position, m_CheckRadius);
+        Gizmos.DrawWireSphere(attackPoint.position, attackRange);
     }
 }

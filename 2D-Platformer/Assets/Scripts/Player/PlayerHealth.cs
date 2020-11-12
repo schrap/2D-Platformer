@@ -13,7 +13,7 @@ public class PlayerHealth : MonoBehaviour
     public int health;
     public float timeInvincible;
 
-    private int m_Health;
+    private int m_Health = 5;
     private float m_InvincibiltyTimer;
 
     private Image[] m_HealthBar;
@@ -57,9 +57,9 @@ public class PlayerHealth : MonoBehaviour
     private void death()
     {
         m_Health = health;
-        for (int i = 0; i < health; i++)
+        foreach (Image healthBar in m_HealthBar)
         {
-            m_HealthBar[i].sprite = healthFull;
+            healthBar.sprite = healthFull;
         }
     }
 }
