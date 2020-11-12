@@ -37,9 +37,6 @@ public class PlayerController : MonoBehaviour
     private bool m_isWallJumping;
     private bool m_IsWallSliding;
     private bool m_IsDashing;
-    private bool m_AnimateFalling;
-
-    private bool m_AnimateDash;
 
     private int m_JumpsAvailable;
     private float m_LongJumpTimer;
@@ -47,6 +44,8 @@ public class PlayerController : MonoBehaviour
     private bool m_DashAvailable;
     private float m_dashTimer;
 
+    private bool m_AnimateFalling;
+    private bool m_AnimateDash;
 
 
     private void Start()
