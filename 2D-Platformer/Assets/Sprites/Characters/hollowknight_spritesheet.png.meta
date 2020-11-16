@@ -17,6 +17,33 @@ TextureImporter:
   - first:
       213: -6430353194133504596
     second: hollowknight_falling
+  - first:
+      213: -4648356965257070742
+    second: hollowknight_spritesheet_0
+  - first:
+      213: -5413160488469893596
+    second: hollowknight_spritesheet_1
+  - first:
+      213: 3767855201860240557
+    second: hollowknight_spritesheet_2
+  - first:
+      213: 5083107287160864000
+    second: hollowknight_spritesheet_3
+  - first:
+      213: -4480585743483231315
+    second: hollowknight_spritesheet_4
+  - first:
+      213: 3511439381098374235
+    second: hollowknight_spritesheet_5
+  - first:
+      213: -4087721195935539240
+    second: hollowknight_spritesheet_6
+  - first:
+      213: -833784183537002228
+    second: hollowknight_spritesheet_7
+  - first:
+      213: 5536719203895066787
+    second: hollowknight_spritesheet_8
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -114,7 +141,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: hollowknight_idle_1_walking_2
+      name: hollowknight_spritesheet_0
       rect:
         serializedVersion: 2
         x: 0
@@ -122,20 +149,20 @@ TextureImporter:
         width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f1432e25c3dfe37f0800000000000000
-      internalID: -630788462254869473
+      spriteID: a67b3a8d7f7bd7fb0800000000000000
+      internalID: -4648356965257070742
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: hollowknight_idle_2
+      name: hollowknight_spritesheet_1
       rect:
         serializedVersion: 2
         x: 32
@@ -143,20 +170,20 @@ TextureImporter:
         width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 888e123a4f34b9d10800000000000000
-      internalID: 2133373566478051464
+      spriteID: 42e6294473790e4b0800000000000000
+      internalID: -5413160488469893596
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: hollowknight_walking_1
+      name: hollowknight_spritesheet_2
       rect:
         serializedVersion: 2
         x: 64
@@ -164,20 +191,20 @@ TextureImporter:
         width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2970c07946a33a0b0800000000000000
-      internalID: -5718662898125109358
+      spriteID: da4ccf7d75c1a4430800000000000000
+      internalID: 3767855201860240557
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: hollowknight_jumping
+      name: hollowknight_spritesheet_3
       rect:
         serializedVersion: 2
         x: 96
@@ -185,20 +212,20 @@ TextureImporter:
         width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 3ba832d399fdb4d90800000000000000
-      internalID: -7112345337252836685
+      spriteID: 00d3c6e6523da8640800000000000000
+      internalID: 5083107287160864000
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: hollowknight_falling
+      name: hollowknight_spritesheet_4
       rect:
         serializedVersion: 2
         x: 0
@@ -206,14 +233,98 @@ TextureImporter:
         width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: cadbf53e6dbc2c6a0800000000000000
-      internalID: -6430353194133504596
+      spriteID: da3a0066103c1d1c0800000000000000
+      internalID: -4480585743483231315
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hollowknight_spritesheet_5
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 64
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b54afa043832bb030800000000000000
+      internalID: 3511439381098374235
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hollowknight_spritesheet_6
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 64
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8df5d6fda3f7547c0800000000000000
+      internalID: -4087721195935539240
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hollowknight_spritesheet_7
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 64
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c0910f0e3bdcd64f0800000000000000
+      internalID: -833784183537002228
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hollowknight_spritesheet_8
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 32
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3a0cf39f7c066dc40800000000000000
+      internalID: 5536719203895066787
       vertices: []
       indices: 
       edges: []

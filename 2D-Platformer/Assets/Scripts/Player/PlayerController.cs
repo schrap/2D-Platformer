@@ -227,14 +227,12 @@ public class PlayerController : MonoBehaviour
 
         if (m_IsGrounded) //animate idle or walking animation
         {
-            
             m_Animator.SetBool("isWalking", m_HorizontalInput != 0);
             m_Animator.SetBool("isJumping", false);
             m_Animator.SetBool("isFalling", false);
         }
         else //animate falling or jumping
         {
-            
             m_Animator.SetBool("isWalking", false);
             m_Animator.SetBool("isJumping", !m_AnimateFalling);
             m_Animator.SetBool("isFalling", m_AnimateFalling);
