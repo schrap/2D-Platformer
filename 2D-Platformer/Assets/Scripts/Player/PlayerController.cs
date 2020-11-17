@@ -22,7 +22,7 @@ public class PlayerController : MonoBehaviour
     public float dashDuration = 4.0f;
 
     public int attackDamage = 1;
-    public float attackRange = 0.15f;
+    public float attackRange = 0.5f;
 
     public float m_CheckRadius = 0.05f;
 
