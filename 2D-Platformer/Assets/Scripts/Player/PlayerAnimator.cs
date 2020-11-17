@@ -4,19 +4,35 @@ using UnityEngine;
 
 public class PlayerAnimator : MonoBehaviour
 {
-    private Animator m_Animator;
-    private bool m_FacingRight;
 
+    public Color damageColor = new Color(0.78f, 0.23f, 0.23f);
+    public float damageAnimationTime = 0.3f;
+
+    private Animator m_Animator;
+    private SpriteRenderer m_PlayerSpriteRenderer;
+
+    private bool m_FacingRight;
     public bool facingRight
     {
         get { return m_FacingRight; }
     }
 
-    
+    private float m_DamageTimer;
+
     private void Start()
     {
         m_Animator = GetComponent<Animator>();
+        m_PlayerSpriteRenderer = GetComponent<SpriteRenderer>();
         m_FacingRight = true;
+    }
+
+    private void Update()
+    {
+        m_DamageTimer -= Time.deltaTime;
+        if (m_DamageTimer < 0)
+        {
+            animateDamage(false);
+        }
     }
 
     //flip the character to face correct direction based on horizontal input
@@ -34,9 +50,17 @@ public class PlayerAnimator : MonoBehaviour
         m_Animator.SetTrigger("isAttacking");
     }
 
-    public void animateDamageTaken()
+    public void animateDamage(bool takesDamage)
     {
-        m_Animator.SetTrigger("isDamaged");
+        if (takesDamage)
+        {
+            m_PlayerSpriteRenderer.color = damageColor;
+            m_DamageTimer = damageAnimationTime;
+        }
+        else
+        {
+            m_PlayerSpriteRenderer.color = Color.white;
+        }
     }
 
     public void animatePlayerDash()

@@ -13,6 +13,9 @@ public class PlayerHealth : MonoBehaviour
     public int health;
     public float timeInvincible;
 
+
+    private PlayerAnimator m_PlayerAnimator;
+
     private int m_Health = 5;
     private float m_InvincibiltyTimer;
 
@@ -21,6 +24,8 @@ public class PlayerHealth : MonoBehaviour
 
     private void Start()
     {
+        m_PlayerAnimator = GetComponent<PlayerAnimator>();
+
         m_Health = health;
         m_InvincibiltyTimer = 0;
 
@@ -46,6 +51,8 @@ public class PlayerHealth : MonoBehaviour
             }
 
             m_InvincibiltyTimer = timeInvincible;
+            m_PlayerAnimator.animateDamage(true);
+
             if (m_Health <= 0)
             {
                 death();
