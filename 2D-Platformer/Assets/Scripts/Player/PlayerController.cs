@@ -22,25 +22,25 @@ public class PlayerController : MonoBehaviour
     public float dashDuration = 4.0f;
 
     public int attackDamage = 1;
-    public float attackRange = 0.5f;
+    public float attackRange = 0.15f;
+
     public float m_CheckRadius = 0.05f;
 
+
     private Rigidbody2D m_Rb;
-    private Animator m_Animator;
+    private PlayerAnimator m_PlayerAnimator;
 
     private float m_DeltaTimeScale = 10.0f;
 
     private float m_HorizontalInput;
 
-    private bool m_FacingRight;
-
     private bool m_IsGrounded;
     private bool m_IsTouchingWall;
+    private bool m_IsWallSliding;
 
     private bool m_IsJumping;
     private bool m_IsLongJumping;
     private bool m_isWallJumping;
-    private bool m_IsWallSliding;
     private bool m_IsDashing;
 
     private int m_JumpsAvailable;
@@ -49,31 +49,64 @@ public class PlayerController : MonoBehaviour
     private bool m_DashAvailable;
     private float m_dashTimer;
 
-    private bool m_AnimateFalling;
-    private bool m_AnimateDash;
-    private bool m_animateAttack;
-
 
     private void Start()
     {
         m_Rb = GetComponent<Rigidbody2D>();
-        m_Animator = GetComponent<Animator>();
-        m_FacingRight = true;
-        m_DashAvailable = true;
+        m_PlayerAnimator = GetComponent<PlayerAnimator>();
     }
 
+    /** get input for player and set bools to determine wether player is idle, walking, jumping, wallsliding, dashing or attacking,
+     *  so that FixedUpdate() can calculate and set correct movement of player
+     */
     private void Update()
     {
-        movePlayer();
-        playerAttack();
-        animatePlayer();
+        m_HorizontalInput = Input.GetAxisRaw("Horizontal");
+        m_IsGrounded = Physics2D.OverlapCircle(groundCheck.position, m_CheckRadius, platform);
+        m_IsTouchingWall = Physics2D.OverlapCircle(wallCheck.position, m_CheckRadius, platform);
+        m_IsWallSliding = m_IsTouchingWall && !m_IsGrounded && m_HorizontalInput != 0 ? true : false;
+
+        m_PlayerAnimator.flipPlayerY(m_HorizontalInput);
+
+        if (m_IsGrounded)
+        {
+            m_PlayerAnimator.animatePlayerIdleOrWalking(m_HorizontalInput);
+        }
+        else
+        {
+            m_PlayerAnimator.animateJumpingOrFalling(m_Rb.velocity.y > 0);
+        }
+
+        //reset jumps and dash when player is on ground or touching wall
+        if (m_IsGrounded || m_IsTouchingWall)
+        {
+            m_JumpsAvailable = jumpAmount;
+            m_DashAvailable = true;
+        }
+       
+
+        if (Input.GetKeyDown(KeyCode.W) || Input.GetKey(KeyCode.W) || Input.GetKeyUp(KeyCode.W))
+        {
+            playerJump();
+        }
+        /*
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            playerDash();
+            m_PlayerAnimator.animatePlayerDash();
+        }
+        */
+        if (Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            playerAttack();
+            m_PlayerAnimator.animatePlayerAttack();
+        }
     }
 
 
-    //calculates actual movement of player based on set bools in movePlayer function
+    //calculates actual movement of player based on set bools in update function
     private void FixedUpdate()
     {
-
         float velocityY = m_Rb.velocity.y;
 
         //calculate y velocity when player is (long) jumping
@@ -105,10 +138,11 @@ public class PlayerController : MonoBehaviour
             }
         }
 
+        /*
         //add dash force to horizontal input for increased x velocity when player is dashing
         if (m_IsDashing)
         {
-            if (m_FacingRight)
+            if (m_PlayerAnimator.facingRight)
             {
                 m_HorizontalInput += dashPower;
             }
@@ -118,39 +152,20 @@ public class PlayerController : MonoBehaviour
             }
             m_IsDashing = false;
         }
-
         m_dashTimer -= Time.deltaTime * m_DeltaTimeScale;   //used for dash cooldown
-
-        m_AnimateFalling = velocityY < 0 ? true : false;   //used for jumping and falling animation
+        */
 
         m_Rb.velocity = new Vector2(m_HorizontalInput * movementSpeed * Time.deltaTime * m_DeltaTimeScale, velocityY);
     }
 
-
-    //gets input and determines movement of player with bools, i.e. jumping, wall sliding, dashing, etc.
-    private void movePlayer()
+    //player (long) jumps if available
+    private void playerJump()
     {
-        m_HorizontalInput = Input.GetAxisRaw("Horizontal");
-
-        m_IsGrounded = Physics2D.OverlapCircle(groundCheck.position, m_CheckRadius, platform);
-        m_IsTouchingWall = Physics2D.OverlapCircle(wallCheck.position, m_CheckRadius, platform);
-
-
-        //reset jumps when player is on ground or touching wall
-        if (m_IsGrounded || m_IsTouchingWall)
-        {
-            m_JumpsAvailable = jumpAmount;
-        }
-
-        //slide player down wall when moving into it
-        m_IsWallSliding = m_IsTouchingWall && !m_IsGrounded && m_HorizontalInput != 0 ? true : false;
-
         //player jumps on button press if available
         if (Input.GetKeyDown(KeyCode.W) && m_JumpsAvailable > 0)
         {
             m_IsJumping = true;
             m_LongJumpTimer = longJumpDuration;
-
             m_isWallJumping = m_IsWallSliding;
         }
 
@@ -168,74 +183,29 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.W))
         {
             m_IsLongJumping = false;
-            m_isWallJumping = false;
         }
+    }
 
-        if (m_IsGrounded || m_IsTouchingWall)
-        {
-            m_DashAvailable = true;
-        }
 
-        //player dashes on button press if available
-        if (Input.GetKeyDown(KeyCode.Space) && m_DashAvailable && m_dashTimer < 0)
+    //player dashes if available and cooldown time expired
+    private void playerDash()
+    {
+        if (m_DashAvailable && m_dashTimer < 0)
         {
             m_IsDashing = true;
             m_DashAvailable = false;
             m_dashTimer = dashDuration;
-            m_AnimateDash = true;
         }
     }
 
 
+    //all enemies inside attack range receive damage based on set player attack damage
     private void playerAttack()
     {
-        if (Input.GetKeyDown(KeyCode.Mouse0))
+        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemies);
+        foreach (Collider2D enemy in hitEnemies)
         {
-            Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemies);
-
-            foreach(Collider2D enemy in hitEnemies)
-            {
-                enemy.GetComponent<EnemyHealth>().receiveDamage(attackDamage);
-            }
-
-            m_animateAttack = true;
-        }
-    }
-
-
-    //animate the correct movement of player
-    private void animatePlayer()
-    {
-        //flip the character to face correct direction
-        if ((m_HorizontalInput > 0 && !m_FacingRight) || (m_HorizontalInput < 0 && m_FacingRight))
-        {
-            transform.Rotate(0, 180, 0);
-            m_FacingRight = !m_FacingRight;
-        }
-
-        if (m_animateAttack)
-        {
-            m_Animator.SetTrigger("isAttacking");
-            m_animateAttack = false;
-        }
-
-        if (m_AnimateDash)
-        {
-            m_Animator.SetTrigger("isDashing");
-            m_AnimateDash = false;
-        }
-
-        if (m_IsGrounded) //animate idle or walking animation
-        {
-            m_Animator.SetBool("isWalking", m_HorizontalInput != 0);
-            m_Animator.SetBool("isJumping", false);
-            m_Animator.SetBool("isFalling", false);
-        }
-        else //animate falling or jumping
-        {
-            m_Animator.SetBool("isWalking", false);
-            m_Animator.SetBool("isJumping", !m_AnimateFalling);
-            m_Animator.SetBool("isFalling", m_AnimateFalling);
+            enemy.GetComponent<EnemyHealth>().receiveDamage(attackDamage);
         }
     }
 
