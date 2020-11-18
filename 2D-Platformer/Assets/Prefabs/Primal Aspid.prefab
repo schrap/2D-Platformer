@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4600682509574834084}
   - component: {fileID: 4600682509574834085}
+  - component: {fileID: 4600682509574834090}
   - component: {fileID: 4600682509574834091}
   - component: {fileID: 4600682509574834087}
-  - component: {fileID: 4600682509574834090}
   m_Layer: 10
   m_Name: Primal Aspid
   m_TagString: Untagged
@@ -84,35 +84,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &4600682509574834091
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4600682509574834088}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4427ff0c8ef38a24d95f23cd723a3528, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  player: {fileID: 0}
-  damageDealt: 1
---- !u!114 &4600682509574834087
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4600682509574834088}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f955eea097ad1ca46a70166629973267, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  health: 5
-  damageColor: {r: 0.78, g: 0.23, b: 0.23, a: 1}
-  damageAnimationTime: 0.3
 --- !u!60 &4600682509574834090
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -175,3 +146,32 @@ PolygonCollider2D:
       - {x: 0.36367422, y: 0.36462736}
       - {x: 0.36307168, y: 0.45171928}
       - {x: 0.32459128, y: 0.45350814}
+--- !u!114 &4600682509574834091
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4600682509574834088}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4427ff0c8ef38a24d95f23cd723a3528, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 0}
+  damageDealt: 1
+--- !u!114 &4600682509574834087
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4600682509574834088}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f955eea097ad1ca46a70166629973267, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 5
+  damageColor: {r: 0.78, g: 0.23, b: 0.23, a: 1}
+  damageAnimationTime: 0.3
